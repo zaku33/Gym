@@ -10,16 +10,16 @@
           <td width="10%">Ngày vào</td>
         </tr>
         <tr>
-          <td>{{ name }}</td>
+          <td>{{ nickname }}</td>
           <td>{{ birthday }}</td>
           <td>{{ email }}</td>
-          <td>{{ joindate }}</td>
+          <td>{{ joinDate }}</td>
         </tr>
       </table>
     </div>
     <div class="form">
         <div>
-          <input type="text" name="name" placeholder="Tên học viên" v-model="name" required />
+          <input type="text" name="name" placeholder="Tên học viên" v-model="nickname" required />
         </div>
         <div>
           <input type="text" name="email" placeholder="Email" v-model="email">
@@ -40,10 +40,10 @@ export default {
   name: "user",
   data() {
     return {
-      name:'',
+      nickname:'',
       birthday:Date,
       email:'',
-      joindate:Date
+      joinDate:Date
     };
   },
   mounted() {
@@ -52,16 +52,16 @@ export default {
   methods: {
     async getDetailUser() {
       const res = await UsersService.getDetailUser({id: this.$route.params.id});
-      this.name = res.data.Name
-      this.birthday = res.data.Birthday
-      this.email = res.data.Email
-      this.joindate = res.data.JoinDate
+      this.name = res.data.nickname
+      this.birthday = res.data.birthday
+      this.email = res.data.email
+      this.joindate = res.data.joinDate
     },
     async EditUser() {
       await UsersService.updateUser({
         id: this.$route.params.id,
-        Name : this.name,
-        Email : this.email
+        nickname : this.nickname,
+        email : this.email
       })
       alert('Cập nhật thành công!!')
     }

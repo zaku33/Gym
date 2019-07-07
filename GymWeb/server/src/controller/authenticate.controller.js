@@ -17,7 +17,7 @@ exports.login = (req, res) => {
         if (err) {
             res.status(422).send(err)
         } else {
-            const admin = Admin.findOne({email:body.email})
+            // const admin = Admin.findOne({email:body.email})
             Admin.findOne({
                 email: body.email
             }).populate('roles').then(async admin => {
@@ -39,13 +39,14 @@ exports.login = (req, res) => {
 exports.userLogin = (req, res) => {
     let body = _extend({}, req.body);
     Joi.validate(body, schemas.login, err => {
+        console.log(schemas.login)
         if (err) {
             // console.log(err);
             res.status(422).send('username or password is invalid');
         } else {
-            const regexLogin = new RegExp(`^${body.username}$`, "i");
+            // const regexLogin = new RegExp(`^${body.username}$`, "i");
             User.findOne({
-                username: regexLogin
+                username: body.username
             }).then(async user => {
                 if (!user || !bcrypt.compareSync(body.password, user.password)) {
                     res.status(499).send('username or password does not match');

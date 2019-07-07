@@ -1,3 +1,5 @@
+/* eslint-disable */
+import Vue from 'vue'
 import Router from 'vue-router'
 
 // Admin Page
@@ -11,11 +13,18 @@ import Users from '@/components/User/Users'
 import NewUser from '@/components/User/NewUser'
 import EditUser from '@/components/User/EditUser'
 
+
 // Another Third-Party's component
+
+Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  routes: [
+  routes: [{
+      path: '/admin-page',
+      name: 'Admin',
+      component: Admin
+    },
     {
       path: '/',
       name: 'Home',

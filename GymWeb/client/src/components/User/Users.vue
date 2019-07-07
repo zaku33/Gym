@@ -66,7 +66,7 @@ export default {
         await this.getAllUser();
       }
       this.$router.push({
-        name: "Users"
+        name: "users"
       });
     }
   },

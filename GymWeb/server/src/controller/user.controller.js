@@ -1,4 +1,5 @@
 var User = require('../models/user.model');
+const bcrypt = require('bcrypt');
 
 // Get all User
 exports.getUser = (req, res) => {
@@ -56,6 +57,8 @@ exports.addUser = (req, res) => {
     });
   } else {
     var body = req.body;
+    body.password = bcrypt.hashSync(body.password,10)
+    body.access_token = bcrypt.hashSync(body.username,10)
     var newUser = new User(body)
     // var Name = req.body.Name;
     // var Birthday = req.body.Birthday;
