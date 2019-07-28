@@ -5,7 +5,6 @@ var AdminSchema = new Schema({
     nickname: String,
     username: String,
     password: String,
-    access_token: String,
     email: {
         type: String,
         required: true,

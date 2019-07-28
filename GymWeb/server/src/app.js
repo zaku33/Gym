@@ -25,4 +25,5 @@ console.log("Connection succeeded at port: " +config.apiPort);
 // (app) is the const app , not app in controller
 app.use('/',require('./routes/all.route'))
 
-require('./seed/admin.seed')
+require('./seed/admin.seed');
+require('./controller/gym_medicine.controller')

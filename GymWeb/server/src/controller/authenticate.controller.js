@@ -10,55 +10,45 @@ const {
     schemas
 } = require('../config/_base.config')
 
-// Admin login
-exports.login = (req, res) => {
+async function ILogin(req, res, schema_login, SchemaModel) {
     let body = _extend({}, req.body);
-    Joi.validate(body, schemas.loginadmin, err => {
+    Joi.validate(body, schema_login, async err => {
         if (err) {
             res.status(422).send(err)
         } else {
-            // const admin = Admin.findOne({email:body.email})
-            Admin.findOne({
-                email: body.email
-            }).populate('roles').then(async admin => {
-                if (!admin || !bcrypt.compareSync(body.password, admin.password)) {
+            if (schema_login == schemas.Admin_Login) {
+                let model = await SchemaModel.findOne({
+                    email: body.email
+                })
+                if (!model || !bcrypt.compareSync(body.password, model.password))
                     res.status(404).send('Admin email or password does not match')
-                } else {
-                    res.send(admin.toJSON({
-                        login: true
-                    }))
-                }
-            }).catch(err => {
-                res.status(500).send(err.message)
-            });
-        }
-    });
-};
+                else res.send(model.toJSON({
+                    login: true
+                }))
+            } else if (schema_login == schemas.User_Login) {
+                let model = await SchemaModel.findOne({
+                    $or: [{
+                        username: body.username
+                    }, {
+                        email: body.username
+                    }]
 
-//User login
-exports.userLogin = (req, res) => {
-    let body = _extend({}, req.body);
-    Joi.validate(body, schemas.login, err => {
-        console.log(schemas.login)
-        if (err) {
-            // console.log(err);
-            res.status(422).send('username or password is invalid');
-        } else {
-            // const regexLogin = new RegExp(`^${body.username}$`, "i");
-            User.findOne({
-                username: body.username
-            }).then(async user => {
-                if (!user || !bcrypt.compareSync(body.password, user.password)) {
-                    res.status(499).send('username or password does not match');
-                } else {
-                    res.send(user.toJSON({
-                        login: true,
-                    }))
-                }
-            }).catch(err => {
-                // console.log(err);
-                res.status(422).send(err.message)
-            });
+                })
+                if (!model || !bcrypt.compareSync(body.password, model.password))
+                    res.status(404).send('Admin email or password does not match')
+                else res.send(model.toJSON({
+                    login: true
+                }))
+            }
         }
     });
+}
+
+module.exports = {
+    admin_Login: (req, res) => {
+        ILogin(req, res, schemas.Admin_Login, Admin)
+    },
+    user_Login: (req, res) => {
+        ILogin(req, res, schemas.User_Login, User)
+    }
 }
